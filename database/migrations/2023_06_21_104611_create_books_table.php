@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('categoryId')->nullable();
             $table->decimal('rating', 2, 2)->nullable();
             $table->string('slug')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('description')->nullable();
+            $table->string('bookCover')->nullable();
+            $table->tinyInteger('status')->default(3);
             $table->timestamps();
         });
     }

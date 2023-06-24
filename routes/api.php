@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\GenreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +28,17 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
-    Route::post('/change-pass', [AuthController::class, 'changePassWord']);    
+    Route::post('/change-pass', [AuthController::class, 'changePassWord']);
+});
+
+Route::group(['prefix' => 'book'], function ($router) {
+    Route::get('/getBookList', [BookController::class, 'index']);
+});
+
+Route::group(['prefix' => 'genre'], function ($router) {
+    Route::get('/getGenreList', [GenreController::class, 'index']);
+});
+
+Route::group(['prefix' => 'collection'], function ($router) {
+    Route::get('/getCollectionList', [CollectionController::class, 'index']);
 });
