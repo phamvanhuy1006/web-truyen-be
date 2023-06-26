@@ -1,20 +1,21 @@
 <?php
 
 namespace App\Http\Services;
+
 use App\Models\Book;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\BookTransformer;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BookService extends BaseService
 {
-    public function setModel()
-    {
-        $this->model = new Book();
-    }
+	public function setModel()
+	{
+		$this->model = new Book();
+	}
 
-    public function appendFilter()
+	public function appendFilter()
 	{
 		// $user = Auth::user();
 		// if ($user && $user->company_id) {
@@ -22,16 +23,63 @@ class BookService extends BaseService
 		// }
 	}
 
-    public function addQuery()
+	public function addQuery()
 	{
 		return $this->query;
 	}
 
-    public function setTransformers($data)
-    {
-        $collection = $data->getCollection();
+	public function setTransformers($data)
+	{
+		$collection = $data->getCollection();
 		$books = collect($collection)->transformWith(new BookTransformer())
 			->paginateWith(new IlluminatePaginatorAdapter($data));
 		return $books;
-    }
+	}
+
+	public function store(Request $request)
+	{
+		$request->only($this->model->getFillable());
+
+		$book = Book::create([
+			'name' => $request->name,
+			'author' => $request->author,
+			'genresList' => $request->genresList,
+			'categoryId' => $request->categoryId,
+			'slug' => $request->slug,
+			'bookCover' => $request->bookCover,
+			'status' => $request->status,
+			'rating' => 'quantity: 0, ratingPoint: 0'
+		]);
+
+		return response()->json([
+			'status' => 200,
+			'data' => $book
+		]);
+	}
+
+	public function rating(Request $request)
+	{
+		$rawData = json_decode($request->getContent());
+		$book = Book::findOrFail($rawData->bookId);
+		$point = $rawData->point;
+
+		$currentRating = $book->rating;
+		// Extracting the quantity
+		preg_match('/quantity: (\d+)/', $currentRating, $quantityMatches);
+		$quantity = $quantityMatches[1];
+
+		// Extracting the rating point
+		preg_match('/ratingPoint: (\d+)/', $currentRating, $ratingPointMatches);
+		$ratingPoint = $ratingPointMatches[1];
+
+		$newRatingPoint = round(($ratingPoint * $quantity + $point) / ($quantity + 1), 2);
+		$book->update([
+			'rating' => 'quantity: ' . $quantity + 1 . ',ratingPoint: ' . $newRatingPoint
+		]);
+
+		return response()->json([
+			'status' => 200,
+			// 'data' => $book
+		]);
+	}
 }

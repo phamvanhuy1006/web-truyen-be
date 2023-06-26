@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('genresList')->nullable();
             $table->string('categoryId')->nullable();
-            $table->decimal('rating', 2, 2)->nullable();
+            $table->string('rating')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->string('bookCover')->nullable();

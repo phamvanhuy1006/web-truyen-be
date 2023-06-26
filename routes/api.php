@@ -34,6 +34,7 @@ Route::group([
 
 Route::group(['prefix' => 'book'], function ($router) {
     Route::get('/getBookList', [BookController::class, 'index']);
+    Route::post('/rating', [BookController::class, 'rating']);
 });
 
 Route::group(['prefix' => 'genre'], function ($router) {

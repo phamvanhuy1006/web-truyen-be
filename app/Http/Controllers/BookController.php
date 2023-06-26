@@ -18,7 +18,7 @@ class BookController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        return $this->service->store($request);
     }
 
 
@@ -27,7 +27,12 @@ class BookController extends BaseController
      */
     public function update(Request $request, string $id)
     {
-        //
+        return $this->service->update($request, $id);
+    }
+
+    public function rating(Request $request)
+    {
+        return $this->service->rating($request);
     }
 
 }

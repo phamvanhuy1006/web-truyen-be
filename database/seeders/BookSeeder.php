@@ -36,7 +36,8 @@ class BookSeeder extends Seeder
                     
                     《 Phàm Nhân Tu Tiên Truyện 》 Tiên Giới Thiên là tích xưa về một Hàn Lập khuynh đảo Tiên Giới, một tiểu tử người phàm tu tiên đến cảnh giới Bất Diệt trong truyền thuyết.',
                 'bookCover' => 'https://s.net.vn/zaMX',
-                'status' => 0
+                'status' => 0,
+                'rating' => 'quantity: 0, ratingPoint: 0'
             ]
         ]);
     }
