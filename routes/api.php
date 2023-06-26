@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GenreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,3 +43,10 @@ Route::group(['prefix' => 'genre'], function ($router) {
 Route::group(['prefix' => 'collection'], function ($router) {
     Route::get('/getCollectionList', [CollectionController::class, 'index']);
 });
+
+
+Route::group(['prefix' => 'comment'], function ($router) {
+    Route::get('/getCommentList', [CommentController::class, 'index']);
+    Route::post('/createComment', [CommentController::class, 'store']);
+});
+

@@ -28,6 +28,7 @@ class BookTransformer extends TransformerAbstract
             'category' => $category,
             'rating' => $book->rating,
             'slug' => $book->slug,
+            'genresList' => $book->genresList,
             'description' => $book->description,
             'status' => $book->status,
             'totalChapters' => $book->chapters->count()

@@ -27,4 +27,9 @@ class Book extends Model
     {
         return $this->hasMany(Chapter::class, 'bookId');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'bookId');
+    }
 }
