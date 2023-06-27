@@ -8,12 +8,12 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class GenreService extends BaseService
 {
-    public function setModel()
-    {
-        $this->model = new Genre();
-    }
+	public function setModel()
+	{
+		$this->model = new Genre();
+	}
 
-    public function appendFilter()
+	public function appendFilter()
 	{
 		// $user = Auth::user();
 		// if ($user && $user->company_id) {
@@ -21,16 +21,17 @@ class GenreService extends BaseService
 		// }
 	}
 
-    public function addQuery()
+	public function addQuery()
 	{
-		return $this->query;
+		return $this->query
+			->orderBy('id', 'asc');
 	}
 
 	public function setTransformers($data)
-    {
-        $collection = $data->getCollection();
+	{
+		$collection = $data->getCollection();
 		$dataTransform = collect($collection)->transformWith(new GenreTransformer())
 			->paginateWith(new IlluminatePaginatorAdapter($data));
 		return $dataTransform;
-    }
+	}
 }

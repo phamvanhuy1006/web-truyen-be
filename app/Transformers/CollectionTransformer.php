@@ -18,7 +18,7 @@ class CollectionTransformer extends TransformerAbstract
         return [
             'id' => $collection->id,
             'name' => $collection->name,
-            'code' => $collection->code,
+            'slug' => $collection->slug,
         ];
     }
 }

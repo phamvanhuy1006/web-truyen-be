@@ -176,14 +176,13 @@ abstract class BaseService
 
         if ($per_page != -1) {
             return $this->query
-                ->orderBy('id', 'desc')
                 ->paginate($per_page ?: 20);
         }
 
         return $this->query->get();
     }
 
-       /**
+    /**
      * Display a listing of the resource.
      *
      * @param Request $request
@@ -195,7 +194,7 @@ abstract class BaseService
             $this->appendFilter();
         }
         $data = $this->addDefaultFilter();
-        
+
         if (method_exists($this, 'setTransformers') && $request['per_page'] != -1) {
             $data = $this->setTransformers($data);
         }

@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
         DB::table('categories')->insert([
             [
                 'name' => 'Truyện Chữ',
-                'code' => 'C_TRUYEN_CHU',
+                'slug' => 'C_TRUYEN_CHU',
             ]
         ]);
     }

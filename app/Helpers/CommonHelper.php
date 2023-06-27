@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+require_once 'vendor/autoload.php';
+use Cocur\Slugify\Slugify;
+
 class CommonHelper
 {
     public static function convertToCode($string)
@@ -11,10 +14,11 @@ class CommonHelper
 
     public static function convertToArrayCode($listName)
     {
+        $slugify = new Slugify();
         foreach ($listName as $string) {
             $result[] = [
                 'name' => $string,
-                'code' => self::convertToCode($string)
+                'slug' => $slugify->slugify($string)
             ];
         }
 

@@ -43,7 +43,7 @@ class CollectionService extends BaseService
 
         $collection = Collection::create([
             'name' => $request->name,
-            'code' => $request->code,
+            'slug' => $request->slug,
         ]);
 
         return response()->json([

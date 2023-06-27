@@ -18,7 +18,7 @@ class BookTransformer extends TransformerAbstract
         $category = [
             'categoryId' => $book->category->id,
             'categoryName' => $book->category->name,
-            'categoryCode' => $book->category->code,
+            'categorySlug' => $book->category->slug,
         ];
         
         return [
