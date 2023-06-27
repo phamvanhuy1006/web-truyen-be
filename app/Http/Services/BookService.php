@@ -38,16 +38,16 @@ class BookService extends BaseService
 
 	public function store(Request $request)
 	{
-		$request->only($this->model->getFillable());
+		$rawData = json_decode($request->getContent());
 
 		$book = Book::create([
-			'name' => $request->name,
-			'author' => $request->author,
-			'genresList' => $request->genresList,
-			'categoryId' => $request->categoryId,
-			'slug' => $request->slug,
-			'bookCover' => $request->bookCover,
-			'status' => $request->status,
+			'name' => $rawData->name,
+			'author' => $rawData->author,
+			'genresList' => $rawData->genresList,
+			'categoryId' => $rawData->categoryId,
+			'slug' => $rawData->slug,
+			'bookCover' => $rawData->bookCover,
+			'status' => $rawData->status,
 			'rating' => 'quantity: 0, ratingPoint: 0'
 		]);
 
