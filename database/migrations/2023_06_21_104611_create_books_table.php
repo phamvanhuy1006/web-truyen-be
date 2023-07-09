@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('author');
             $table->string('genresList')->nullable();
+            $table->string('collectionList')->nullable();
             $table->string('categoryId')->nullable();
             $table->string('rating')->nullable();
             $table->string('slug')->nullable();

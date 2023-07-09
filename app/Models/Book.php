@@ -16,7 +16,7 @@ class Book extends Model
         'INCOMMING' => 3
     ];
 
-    protected $fillable = ['name', 'author', 'genresList', 'categoryId', 'rating', 'slug', 'description', 'status'];
+    protected $fillable = ['name', 'author', 'genresList', 'collectionList', 'categoryId', 'rating', 'slug', 'description', 'status'];
 
     public function category()
     {

@@ -17,7 +17,8 @@ class BookSeeder extends Seeder
             [
                 'name' => 'Phàm Nhân Tu Tiên',
                 'author' => 'Vong Ngữ',
-                'genresList' => 'G_TIEN_HIEP,G_HUYEN_HUYEN',
+                'genresList' => 'tien-hiep, kiem-hiep',
+                'collectionList' => 'truyen-hot, truyen-full',
                 'categoryId' => 1,
                 'slug' => 'pham-nhan-tu-tien',
                 'description' => '

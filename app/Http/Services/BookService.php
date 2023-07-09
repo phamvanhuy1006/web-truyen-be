@@ -79,7 +79,9 @@ class BookService extends BaseService
 
 		return response()->json([
 			'status' => 200,
-			// 'data' => $book
+			'data' => [
+				"ratingPoint" => $newRatingPoint
+			]
 		]);
 	}
 }
