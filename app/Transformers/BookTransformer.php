@@ -43,3 +43,4 @@ class BookTransformer extends TransformerAbstract
         ];
     }
 }
+    

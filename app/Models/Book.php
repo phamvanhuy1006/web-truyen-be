@@ -10,10 +10,10 @@ class Book extends Model
     use HasFactory;
 
     const STATUS_BOOK = [
-        'COMPLETED' => 0,
-        'UNCOMPLETED' => 1,
-        'DROP' => 2,
-        'INCOMMING' => 3
+        'COMPLETED' => 'COMPLETED',
+        'UNCOMPLETED' => 'UNCOMPLETED',
+        'DROP' => 'DROP',
+        'INCOMMING' => 'INCOMMING'
     ];
 
     protected $fillable = ['name', 'author', 'genresList', 'collectionList', 'categoryId', 'rating', 'slug', 'description', 'status'];

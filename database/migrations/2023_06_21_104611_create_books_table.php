@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->string('bookCover')->nullable();
-            $table->tinyInteger('status')->default(3);
-            $table->timestamps();
+            $table->string('status')->nullable();
+            $table->timestamps();   
         });
     }
 
