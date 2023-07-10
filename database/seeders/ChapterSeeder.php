@@ -15,9 +15,11 @@ class ChapterSeeder extends Seeder
     {
         DB::table('chapters')->insert([
             [
-                'name' => 'Chương 1',
+                'name' => 'Thieu nien ngheo',
                 'bookId' => 1,
                 'content' => 'Nội dung nè',
+                'chapterOrder' => 1,
+                'slug' => 'chuong-1'
             ]
         ]);
     }

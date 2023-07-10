@@ -35,4 +35,9 @@ class BookController extends BaseController
         return $this->service->rating($request);
     }
 
+    public function chapter(Request $request)
+    {
+        return $this->service->chapter($request);
+    }
+
 }

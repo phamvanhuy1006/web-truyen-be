@@ -3,6 +3,8 @@
 namespace App\Http\Services;
 
 use App\Models\Book;
+use App\Models\Chapter;
+use App\Models\Genre;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\BookTransformer;
 use Illuminate\Http\Request;
@@ -62,6 +64,44 @@ class BookService extends BaseService
 		return response()->json([
 			'status' => 200,
 			'data' => $book
+		]);
+	}
+
+	public function show(Request $request)
+	{
+		$request->only($this->model->getFillable());
+		$book = Book::findOrFail($request->id);
+		$category = [
+            'categoryId' => $book->category->id,
+            'categoryName' => $book->category->name,
+            'categorySlug' => $book->category->slug,
+        ];
+
+        preg_match('/ratingPoint: (\d+)/', $book->rating, $ratingPointMatches);
+        $ratingPoint = $ratingPointMatches[1];
+
+        $genresArray = explode(',', $book->genresList);
+		foreach ($genresArray as &$genre) {
+			$genre = trim($genre);
+		}
+        $genres = Genre::whereIn('slug', $genresArray)->get();
+        
+        $result = [
+            'id' => $book->id,
+            'name' => $book->name,
+            'author' => $book->author,
+            'category' => $category,
+            'rating' => $ratingPoint,
+            'slug' => $book->slug,
+            'genresList' => $genres,
+            'description' => $book->description,
+            'status' => $book->status,
+            'totalChapters' => $book->chapters->count(),
+            'bookCover' => $book->bookCover,
+        ];
+		return response()->json([
+			'status' => 200,
+			'data' => $result
 		]);
 	}
 

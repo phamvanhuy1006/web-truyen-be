@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('content')->nullable();
+            $table->string('slug');
+            $table->integer('chapterOrder');
             $table->unsignedBigInteger('bookId');
             $table->timestamps();
         });

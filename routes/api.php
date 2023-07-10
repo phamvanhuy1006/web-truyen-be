@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GenreController;
@@ -35,7 +36,14 @@ Route::group([
 Route::group(['prefix' => 'book'], function ($router) {
     Route::get('/getBookList', [BookController::class, 'index']);
     Route::get('/getBook', [BookController::class, 'show']);
+   
     Route::post('/rating', [BookController::class, 'rating']);
+});
+
+Route::group(['prefix' => 'chapter'], function ($router) {
+    Route::get('/getChapter', [ChapterController::class, 'show']);
+    Route::post('/createChapter', [ChapterController::class, 'store']);
+    Route::post('/updateChapter', [ChapterController::class, 'update']);
 });
 
 Route::group(['prefix' => 'genre'], function ($router) {

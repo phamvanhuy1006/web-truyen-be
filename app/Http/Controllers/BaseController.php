@@ -14,9 +14,9 @@ class BaseController extends Controller
         return $this->service->index($request);
     }
 
-    public function show(Request $request, $id)
+    public function show(Request $request)
     {
-        return $this->service->show($request, $id);
+        return $this->service->show($request);
     }
 
     // public function store(Request $request)

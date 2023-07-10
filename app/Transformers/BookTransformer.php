@@ -24,9 +24,12 @@ class BookTransformer extends TransformerAbstract
 
         preg_match('/ratingPoint: (\d+)/', $book->rating, $ratingPointMatches);
         $ratingPoint = $ratingPointMatches[1];
-        $slugsArray = explode(',', $book->slug);
-        
-        $genres = Genre::whereIn('slug', $slugsArray)->get();
+
+        $genresArray = explode(',', $book->genresList);
+        foreach ($genresArray as &$genre) {
+			$genre = trim($genre);
+		}
+        $genres = Genre::whereIn('slug', $genresArray)->get();
         
         return [
             'id' => $book->id,
