@@ -23,6 +23,14 @@ class BookService extends BaseService
 		// }
 	}
 
+	// public function index(Request $request)
+    // {
+	// 	$rawData = json_decode($request->getContent());
+
+
+    //     return parent::index($rawData);
+    // }
+
 	public function addQuery()
 	{
 		return $this->query;

@@ -34,6 +34,7 @@ Route::group([
 
 Route::group(['prefix' => 'book'], function ($router) {
     Route::get('/getBookList', [BookController::class, 'index']);
+    Route::get('/getBook', [BookController::class, 'show']);
     Route::post('/rating', [BookController::class, 'rating']);
 });
 
@@ -50,4 +51,3 @@ Route::group(['prefix' => 'comment'], function ($router) {
     Route::get('/getCommentList', [CommentController::class, 'index']);
     Route::post('/createComment', [CommentController::class, 'store']);
 });
-
