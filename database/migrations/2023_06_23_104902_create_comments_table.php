@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('content');
             $table->unsignedBigInteger('bookId');
             $table->string('commentator');
-            $table->string('emailCommentator');
+            $table->string('email');
             $table->timestamps();
         });
     }

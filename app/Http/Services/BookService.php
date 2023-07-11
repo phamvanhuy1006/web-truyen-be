@@ -93,6 +93,8 @@ class BookService extends BaseService
 
 		$booksByTheSameAuthor = Book::where('author', $book->author)->get(['slug', 'name']);
 
+		$comments = $book->comments;
+
 		$result = [
 			'id' => $book->id,
 			'name' => $book->name,
@@ -105,6 +107,7 @@ class BookService extends BaseService
 			'description' => $book->description,
 			'status' => $book->status,
 			'chapter' => $book->chapters,
+			'comments' => $comments,
 			'totalChapters' => $book->chapters->count(),
 			'bookCover' => $book->bookCover,
 		];

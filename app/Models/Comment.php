@@ -10,7 +10,7 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'bookId', 'emailCommentator', 'commentator', 'content'
+        'bookId', 'email', 'commentator', 'content'
     ];
 
     public function book()

@@ -16,40 +16,37 @@ class CommentService extends BaseService
     }
 
     public function appendFilter()
-	{
-		// $user = Auth::user();
-		// if ($user && $user->company_id) {
-		// 	$this->query->where(['company_id' => $user->company_id]);
-		// }
-	}
+    {
+        // $user = Auth::user();
+        // if ($user && $user->company_id) {
+        // 	$this->query->where(['company_id' => $user->company_id]);
+        // }
+    }
 
     public function addQuery()
-	{
-		return $this->query;
-	}
+    {
+        return $this->query;
+    }
 
     public function setTransformers($data)
     {
         $collection = $data->getCollection();
-		$dataTransform = collect($collection)->transformWith(new CommentTransformer())
-			->paginateWith(new IlluminatePaginatorAdapter($data));
-		return $dataTransform;
+        $dataTransform = collect($collection)->transformWith(new CommentTransformer())
+            ->paginateWith(new IlluminatePaginatorAdapter($data));
+        return $dataTransform;
     }
 
     public function store(Request $request)
     {
-        $request->only($this->model->getFillable());
+        $rawData = json_decode($request->getContent());
 
         $comment = Comment::create([
-            'content' => $request->content,
-            'bookId' => $request->bookId,
-            'commentator' => $request->commentator,
-            'emailCommentator' => $request->emailCommentator,
+            'content' => $rawData->content,
+            'bookId' => $rawData->bookId,
+            'commentator' => $rawData->commentator,
+            'email' => $rawData->email,
         ]);
 
-        return response()->json([
-            'status' => 200,
-            'data' => $comment
-        ]);
+        return response()->json($comment, 200);
     }
 }
