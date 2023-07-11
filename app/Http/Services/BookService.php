@@ -26,12 +26,12 @@ class BookService extends BaseService
 	}
 
 	// public function index(Request $request)
-    // {
+	// {
 	// 	$rawData = json_decode($request->getContent());
 
 
-    //     return parent::index($rawData);
-    // }
+	//     return parent::index($rawData);
+	// }
 
 	public function addQuery()
 	{
@@ -70,39 +70,46 @@ class BookService extends BaseService
 	public function show(Request $request)
 	{
 		$request->only($this->model->getFillable());
-		$book = Book::findOrFail($request->id);
+		$book = Book::where('slug', $request->slug)->first();
+		
+		if (!$book) {
+			return response()->json(['message' => 'Book not found'], 400);
+		}
+
 		$category = [
-            'categoryId' => $book->category->id,
-            'categoryName' => $book->category->name,
-            'categorySlug' => $book->category->slug,
-        ];
+			'categoryId' => $book->category->id,
+			'categoryName' => $book->category->name,
+			'categorySlug' => $book->category->slug,
+		];
 
-        preg_match('/ratingPoint: (\d+)/', $book->rating, $ratingPointMatches);
-        $ratingPoint = $ratingPointMatches[1];
+		preg_match('/ratingPoint: (\d+)/', $book->rating, $ratingPointMatches);
+		$ratingPoint = $ratingPointMatches[1];
 
-        $genresArray = explode(',', $book->genresList);
+		$genresArray = explode(',', $book->genresList);
 		foreach ($genresArray as &$genre) {
 			$genre = trim($genre);
 		}
-        $genres = Genre::whereIn('slug', $genresArray)->get();
-        
-        $result = [
-            'id' => $book->id,
-            'name' => $book->name,
-            'author' => $book->author,
-            'category' => $category,
-            'rating' => $ratingPoint,
-            'slug' => $book->slug,
-            'genresList' => $genres,
-            'description' => $book->description,
-            'status' => $book->status,
-            'totalChapters' => $book->chapters->count(),
-            'bookCover' => $book->bookCover,
-        ];
-		return response()->json([
-			'status' => 200,
-			'data' => $result
-		]);
+		$genres = Genre::whereIn('slug', $genresArray)->get();
+
+		$booksByTheSameAuthor = Book::where('author', $book->author)->get(['slug', 'name']);
+
+		$result = [
+			'id' => $book->id,
+			'name' => $book->name,
+			'author' => $book->author,
+			'booksByTheSameAuthor' => $booksByTheSameAuthor,
+			'category' => $category,
+			'rating' => $ratingPoint,
+			'slug' => $book->slug,
+			'genresList' => $genres,
+			'description' => $book->description,
+			'status' => $book->status,
+			'chapter' => $book->chapters,
+			'totalChapters' => $book->chapters->count(),
+			'bookCover' => $book->bookCover,
+		];
+
+		return response()->json($result, 200);
 	}
 
 	public function rating(Request $request)
