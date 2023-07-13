@@ -35,6 +35,13 @@ class ChapterService extends BaseService
         return $dataTransform;
     }
 
+    public function index(Request $request)
+    {
+        $request->only($this->model->getFillable());
+        $this->query->where('bookSlug', $request->bookSlug);
+        return parent::index($request);
+    }
+
     public function store(Request $request)
     {
         $rawData = json_decode($request->getContent());
@@ -82,6 +89,7 @@ class ChapterService extends BaseService
                 400
             );
         }
+
         $nextChapter = Chapter::where([
             "bookSlug" => $request->bookSlug,
             "chapterOrder" => $chapter->chapterOrder + 1
@@ -90,7 +98,7 @@ class ChapterService extends BaseService
             "bookSlug" => $request->bookSlug,
             "chapterOrder" => $chapter->chapterOrder - 1
         ])->first();
-        
+
         $chapter = [
             ...$chapter->toArray(),
             'nextChapter' => $nextChapter->slug ?? '',

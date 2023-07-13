@@ -40,6 +40,7 @@ Route::group(['prefix' => 'book'], function ($router) {
 });
 
 Route::group(['prefix' => 'chapter'], function ($router) {
+    Route::get('/getAllChapters', [ChapterController::class, 'index']);
     Route::get('/getChapter', [ChapterController::class, 'show']);
     Route::post('/createChapter', [ChapterController::class, 'store']);
     Route::post('/updateChapter', [ChapterController::class, 'update']);
