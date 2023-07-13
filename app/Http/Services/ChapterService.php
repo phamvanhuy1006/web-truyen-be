@@ -60,24 +60,46 @@ class ChapterService extends BaseService
 
         $fillableData = array_intersect_key($rawData, array_flip($chapter->getFillable()));
         $chapter->update($fillableData);
-        
+
         return response()->json([
             'status' => 200,
             'data' => $chapter
         ]);
     }
 
-	public function show(Request $request)
-	{
+    public function show(Request $request)
+    {
         $request->only($this->model->getFillable());
-		
-		$chapter = Chapter::where([
-			"bookSlug" => $request->bookSlug,
-			"chapterOrder" => $request->chapterOrder
-		])->get();
 
-		return response()->json([
-			'data' => $chapter
-		]);
-	}
+        $chapter = Chapter::where([
+            "bookSlug" => $request->bookSlug,
+            "slug" => $request->slug
+        ])->first();
+
+        if (!isset($chapter)) {
+            return response()->json(
+                ['message' => 'ChapterNotFound'],
+                400
+            );
+        }
+        $nextChapter = Chapter::where([
+            "bookSlug" => $request->bookSlug,
+            "chapterOrder" => $chapter->chapterOrder + 1
+        ])->first();
+        $previousChapter = Chapter::where([
+            "bookSlug" => $request->bookSlug,
+            "chapterOrder" => $chapter->chapterOrder - 1
+        ])->first();
+        
+        $chapter = [
+            ...$chapter->toArray(),
+            'nextChapter' => $nextChapter->slug ?? '',
+            'previousChapter' => $previousChapter->slug ?? '',
+        ];
+
+        return response()->json(
+            $chapter,
+            200
+        );
+    }
 }
