@@ -21,7 +21,7 @@ class ChapterTransformer extends TransformerAbstract
             'slug' => $chapter->slug,
             'chapterOrder' => $chapter->chapterOrder,
             'content' => $chapter->content,
-            'bookId' => $chapter->bookId
+            'bookSlug' => $chapter->bookSlug
         ];
     }
 }

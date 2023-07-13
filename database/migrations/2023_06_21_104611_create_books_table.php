@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('collectionList')->nullable();
             $table->string('categoryId')->nullable();
             $table->string('rating')->nullable();
-            $table->string('slug')->nullable();
+            $table->string('slug')->unique();
             $table->longText('description')->nullable();
             $table->string('bookCover')->nullable();
             $table->string('status')->nullable();

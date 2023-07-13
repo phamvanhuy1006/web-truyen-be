@@ -44,7 +44,7 @@ class ChapterService extends BaseService
             'slug' => $rawData->slug,
             'chapterOrder' => $rawData->chapterOrder,
             'content' => $rawData->content,
-            'bookId' => $rawData->bookId
+            'bookSlug' => $rawData->bookSlug
         ]);
 
         return response()->json([
@@ -72,12 +72,11 @@ class ChapterService extends BaseService
         $request->only($this->model->getFillable());
 		
 		$chapter = Chapter::where([
-			"bookId" => $request->bookId,
+			"bookSlug" => $request->bookSlug,
 			"chapterOrder" => $request->chapterOrder
 		])->get();
 
 		return response()->json([
-			'status' => 200,
 			'data' => $chapter
 		]);
 	}

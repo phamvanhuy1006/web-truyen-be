@@ -25,7 +25,7 @@ class Book extends Model
 
     public function chapters()
     {
-        return $this->hasMany(Chapter::class, 'bookId');
+        return $this->hasMany(Chapter::class, 'bookSlug', 'slug');
     }
 
     public function comments()
