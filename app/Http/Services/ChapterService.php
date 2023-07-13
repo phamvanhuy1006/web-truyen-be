@@ -80,7 +80,7 @@ class ChapterService extends BaseService
 
         $chapter = Chapter::where([
             "bookSlug" => $request->bookSlug,
-            "slug" => $request->slug
+            "slug" => $request->slug,
         ])->first();
 
         if (!isset($chapter)) {
@@ -103,6 +103,7 @@ class ChapterService extends BaseService
             ...$chapter->toArray(),
             'nextChapter' => $nextChapter->slug ?? '',
             'previousChapter' => $previousChapter->slug ?? '',
+            "bookName" => $chapter->book->name
         ];
 
         return response()->json(
