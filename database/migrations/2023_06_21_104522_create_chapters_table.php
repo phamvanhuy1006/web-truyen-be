@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('content');
+            $table->longText('content');
             $table->string('slug');
             $table->integer('chapterOrder');
             $table->string('bookSlug');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Book;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,10 +21,11 @@ return new class extends Migration
             $table->string('categoryId')->nullable();
             $table->string('rating')->nullable();
             $table->string('slug')->unique();
-            $table->longText('description')->nullable();
+            $table->mediumText('description')->nullable();
             $table->string('bookCover')->nullable();
             $table->string('status')->nullable();
-            $table->timestamps();   
+            $table->string('isPublish')->default(Book::IS_PUBLISH['DRAFT']);
+            $table->timestamps();
         });
     }
 

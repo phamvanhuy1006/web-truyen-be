@@ -10,7 +10,7 @@ class Chapter extends Model
     use HasFactory;
 
     protected $fillable = [
-        "name", "content", "slug", "chapterOrder", "bookSlug"
+        "name", "content", "slug", "chapterOrder", "bookSlug", "description"
     ];
 
     public function book()

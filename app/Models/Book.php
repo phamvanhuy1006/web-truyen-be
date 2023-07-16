@@ -16,6 +16,11 @@ class Book extends Model
         'INCOMMING' => 'INCOMMING'
     ];
 
+    const IS_PUBLISH = [
+        'PUBLISH' => 'PUBLISH',
+        'DRAFT' => 'DRAFT'
+    ];
+
     protected $fillable = ['name', 'author', 'genresList', 'collectionList', 'categoryId', 'rating', 'slug', 'description', 'status'];
 
     public function category()

@@ -24,12 +24,12 @@ class FileController extends Controller
 	
 				Storage::disk('s3')->put($filePath, file_get_contents($file));
 				$paths[] = [
-					'fileName' => $originalFileName,
+					'fileName' => $file->getClientOriginalName(),
 					'fileUrl' => Storage::disk('s3')->url($filePath)
 				];
 			}
 		}
 
-		return response()->json(['paths' => $paths], 200);
+		return response()->json($paths, 200);
 	}
 }
