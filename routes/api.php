@@ -5,6 +5,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\GenreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,8 @@ Route::group([
 Route::group(['prefix' => 'book'], function ($router) {
     Route::get('/getBookList', [BookController::class, 'index']);
     Route::get('/getBook', [BookController::class, 'show']);   
+    Route::post('/createBook', [BookController::class, 'store']);
+    Route::post('/updateBook', [BookController::class, 'update']);
     Route::post('/rating', [BookController::class, 'rating']);
 });
 
@@ -58,4 +61,8 @@ Route::group(['prefix' => 'collection'], function ($router) {
 Route::group(['prefix' => 'comment'], function ($router) {
     Route::get('/getCommentList', [CommentController::class, 'index']);
     Route::post('/createComment', [CommentController::class, 'store']);
+});
+
+Route::group(['prefix' => 'file'], function ($router) {
+    Route::post('/uploadFile', [FileController::class, 'postUpload']);
 });

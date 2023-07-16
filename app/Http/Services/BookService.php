@@ -9,6 +9,7 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\BookTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class BookService extends BaseService
 {
@@ -54,12 +55,28 @@ class BookService extends BaseService
 			'name' => $rawData->name,
 			'author' => $rawData->author,
 			'genresList' => $rawData->genresList,
+			'collectionList' => $rawData->collectionList,
 			'categoryId' => $rawData->categoryId,
+			'description' => $rawData->description,
 			'slug' => $rawData->slug,
 			'bookCover' => $rawData->bookCover,
 			'status' => $rawData->status,
 			'rating' => 'quantity: 0, ratingPoint: 0'
 		]);
+
+		return response()->json(
+			$book,
+			200
+		);
+	}
+
+	public function update(Request $request)
+	{
+		$rawData = json_decode($request->getContent());
+		$book = Chapter::findOrFail($rawData->id);
+
+		$fillableData = array_intersect_key($rawData, array_flip($book->getFillable()));
+		$book->update($fillableData);
 
 		return response()->json([
 			'status' => 200,
@@ -71,7 +88,7 @@ class BookService extends BaseService
 	{
 		$request->only($this->model->getFillable());
 		$book = Book::where('slug', $request->slug)->first();
-		
+
 		if (!$book) {
 			return response()->json(['message' => 'Book not found'], 400);
 		}

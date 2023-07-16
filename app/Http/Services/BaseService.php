@@ -173,10 +173,11 @@ abstract class BaseService
         }
 
         $per_page = $this->request->per_page;
+        $pageIndex = $this->request->pageIndex;
 
         if ($per_page != -1) {
             return $this->query
-                ->paginate($per_page ?: 20);
+                ->paginate($per_page ?: 20, ['*'] ,'page', $pageIndex ?: 1);
         }
 
         return $this->query->get();
