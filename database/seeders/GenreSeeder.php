@@ -16,7 +16,7 @@ class GenreSeeder extends Seeder
     {
         $listGenres = CommonHelper::convertToArrayCode([
             'Tiên Hiệp', 'Kiếm Hiệp', 'Ngôn Tình',
-            'Đam Mỹ', 'Quan Trường', 'Võng Du', 'Khoa Huyễn',
+            'Đam Mỹ', 'Quan Trường', 'Võng Du', 'Khoa Huyễn', 'Huyền Huyễn',
             'Hệ Thống', 'Dị Giới', 'Dị Năng', 'Quân Sự',
             'Lịch Sử', 'Xuyên Không', 'Xuyên Nhanh',
             'Trọng Sinh', 'Thám Hiểm', 'Linh Dị', 'Ngược',
