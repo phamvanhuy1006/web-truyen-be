@@ -10,11 +10,11 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'bookId', 'email', 'commentator', 'content'
+        'bookSlug', 'email', 'commentator', 'content'
     ];
 
     public function book()
     {
-        return $this->belongsTo(Book::class, 'bookId');
+        return $this->belongsTo(Book::class, 'bookSlug', 'slug');
     }
 }

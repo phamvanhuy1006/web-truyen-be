@@ -18,7 +18,7 @@ class CommentSeeder extends Seeder
             [
                 'email' => 'pvhuy1006@gmail.com',
                 'commentator' => "Van Huy Pham",
-                'bookId' => 1,
+                'bookSlug' => 'pham-nhan-tu-tien',
                 'content' => "Truyện hay quá!"
             ]
         ]);

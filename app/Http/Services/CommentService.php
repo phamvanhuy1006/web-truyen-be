@@ -49,7 +49,7 @@ class CommentService extends BaseService
 
         $comment = Comment::create([
             'content' => $rawData->content,
-            'bookId' => $rawData->bookId,
+            'bookSlug' => $rawData->bookSlug,
             'commentator' => $rawData->commentator,
             'email' => $rawData->email,
         ]);
