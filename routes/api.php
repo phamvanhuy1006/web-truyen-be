@@ -57,7 +57,6 @@ Route::group(['prefix' => 'collection'], function ($router) {
     Route::get('/getCollectionList', [CollectionController::class, 'index']);
 });
 
-
 Route::group(['prefix' => 'comment'], function ($router) {
     Route::get('/getCommentList', [CommentController::class, 'index']);
     Route::post('/createComment', [CommentController::class, 'store']);

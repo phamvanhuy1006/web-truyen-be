@@ -17,7 +17,7 @@ class ChapterController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        return $this->service->store($request);
     }
 
     /**
@@ -25,6 +25,6 @@ class ChapterController extends BaseController
      */
     public function update(Request $request, string $id)
     {
-        //
+        return $this->service->update($request, $id);
     }
 }

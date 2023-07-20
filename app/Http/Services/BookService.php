@@ -73,7 +73,7 @@ class BookService extends BaseService
 	public function update(Request $request)
 	{
 		$rawData = json_decode($request->getContent());
-		$book = Chapter::findOrFail($rawData->id);
+		$book = Book::findOrFail($rawData->id);
 
 		$fillableData = array_intersect_key($rawData, array_flip($book->getFillable()));
 		$book->update($fillableData);

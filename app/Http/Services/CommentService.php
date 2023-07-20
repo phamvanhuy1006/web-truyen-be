@@ -36,6 +36,13 @@ class CommentService extends BaseService
         return $dataTransform;
     }
 
+    public function index(Request $request)
+    {
+        $request->only($this->model->getFillable());
+        $this->query->where('bookSlug', $request->bookSlug);
+        return parent::index($request);
+    }
+
     public function store(Request $request)
     {
         $rawData = json_decode($request->getContent());

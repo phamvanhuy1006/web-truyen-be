@@ -94,6 +94,7 @@ class ChapterService extends BaseService
             "bookSlug" => $request->bookSlug,
             "chapterOrder" => $chapter->chapterOrder + 1
         ])->first();
+        
         $previousChapter = Chapter::where([
             "bookSlug" => $request->bookSlug,
             "chapterOrder" => $chapter->chapterOrder - 1
