@@ -21,7 +21,7 @@ class Book extends Model
         'DRAFT' => 'DRAFT'
     ];
 
-    protected $fillable = ['name', 'author', 'genresList', 'collectionList', 'categoryId', 'rating', 'slug', 'description', 'status'];
+    protected $fillable = ['name', 'author', 'genresList', 'collectionList', 'bookCover', 'categoryId', 'rating', 'slug', 'description', 'status'];
 
     public function category()
     {
