@@ -24,7 +24,6 @@ class BookTransformer extends TransformerAbstract
 
         preg_match('/ratingPoint: (\d+)/', $book->rating, $ratingPointMatches);
         $ratingPoint = $ratingPointMatches[1];
-
         $genresArray = explode(',', $book->genresList);
         foreach ($genresArray as &$genre) {
 			$genre = trim($genre);

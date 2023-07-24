@@ -56,7 +56,7 @@ class BookService extends BaseService
 			'author' => $rawData->author ?? '',
 			'genresList' => $rawData->genresList ?? '',
 			'collectionList' => $rawData->collectionList ?? '',
-			'categoryId' => $rawData->categoryId ?? '',
+			'categoryId' => $rawData->categoryId ?? 1,
 			'description' => $rawData->description ?? '',
 			'slug' => $rawData->slug ?? '',
 			'bookCover' => $rawData->bookCover ?? '',

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('author');
             $table->string('genresList')->nullable();
             $table->string('collectionList')->nullable();
-            $table->string('categoryId')->nullable();
-            $table->string('rating')->nullable();
+            $table->unsignedBigInteger('categoryId')->default(1);
+            $table->string('rating')->default('quantity: 0, ratingPoint: 0');
             $table->string('slug')->unique();
             $table->mediumText('description')->nullable();
             $table->string('bookCover')->nullable();
