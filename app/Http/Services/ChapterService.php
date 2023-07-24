@@ -45,13 +45,13 @@ class ChapterService extends BaseService
     public function store(Request $request)
     {
         $rawData = json_decode($request->getContent());
-
+        $lastChapter = Chapter::where('bookSlug', $rawData->bookSlug)->count();
         $chapter = Chapter::create([
-            'name' => $rawData->name,
-            'slug' => $rawData->slug,
-            'chapterOrder' => $rawData->chapterOrder,
-            'content' => $rawData->content,
-            'bookSlug' => $rawData->bookSlug
+            'name' => $rawData->name ?? '',
+            'slug' => $rawData->slug ?? '',
+            'chapterOrder' => $lastChapter + 1,
+            'content' => $rawData->content ?? '',
+            'bookSlug' => $rawData->bookSlug ?? ''
         ]);
 
         return response()->json([

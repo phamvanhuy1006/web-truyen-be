@@ -72,9 +72,8 @@ class BookService extends BaseService
 
 	public function update(Request $request)
 	{
-		$rawData = json_decode($request->getContent());
-		$book = Book::findOrFail($rawData->id);
-
+		$rawData = json_decode($request->getContent(), true); // Convert JSON object to array
+		$book = Book::findOrFail($rawData['id']); // Access the 'id' field as an array element
 		$fillableData = array_intersect_key($rawData, array_flip($book->getFillable()));
 		$book->update($fillableData);
 
