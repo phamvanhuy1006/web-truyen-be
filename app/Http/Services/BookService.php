@@ -52,15 +52,15 @@ class BookService extends BaseService
 		$rawData = json_decode($request->getContent());
 
 		$book = Book::create([
-			'name' => $rawData->name,
-			'author' => $rawData->author,
-			'genresList' => $rawData->genresList,
-			'collectionList' => $rawData->collectionList,
-			'categoryId' => $rawData->categoryId,
-			'description' => $rawData->description,
-			'slug' => $rawData->slug,
-			'bookCover' => $rawData->bookCover,
-			'status' => $rawData->status,
+			'name' => $rawData->name ?? '',
+			'author' => $rawData->author ?? '',
+			'genresList' => $rawData->genresList ?? '',
+			'collectionList' => $rawData->collectionList ?? '',
+			'categoryId' => $rawData->categoryId ?? '',
+			'description' => $rawData->description ?? '',
+			'slug' => $rawData->slug ?? '',
+			'bookCover' => $rawData->bookCover ?? '',
+			'status' => $rawData->status ?? '',
 			'rating' => 'quantity: 0, ratingPoint: 0'
 		]);
 
