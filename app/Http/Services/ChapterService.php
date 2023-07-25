@@ -62,8 +62,8 @@ class ChapterService extends BaseService
 
     public function update(Request $request)
     {
-        $rawData = json_decode($request->getContent());
-        $chapter = Chapter::findOrFail($rawData->id);
+        $rawData = json_decode($request->getContent(), true); // Convert JSON object to array
+        $chapter = Chapter::findOrFail($rawData['id']);
 
         $fillableData = array_intersect_key($rawData, array_flip($chapter->getFillable()));
         $chapter->update($fillableData);

@@ -21,11 +21,11 @@ class FileController extends Controller
 				$timestamp = now()->timestamp;
 				$newFileName = $originalFileName . '_' . $timestamp;
 				$filePath = 'images/' . $newFileName . '.' . $extension;
-	
-				Storage::disk('s3')->put($filePath, file_get_contents($file));
+
+				Storage::disk('s3')->put($filePath, file_get_contents($file), 'public');
 				$paths[] = [
 					'fileName' => $file->getClientOriginalName(),
-					'fileUrl' => Storage::disk('s3')->url($filePath)
+					'fileUrl' => env('AWS_URL_FILE', 'https://van-huong-ngoc.s3.us-east-2.amazonaws.com/') . $filePath
 				];
 			}
 		}

@@ -201,4 +201,28 @@ abstract class BaseService
         }
         return response()->json($data);
     }
+
+    public function destroy(Request $request, $id, $isForceDelete = false)
+    {
+        if ($isForceDelete) {
+            $this->_forceDelete($request, $id);
+        } else {
+            $this->_softDelete($request, $id);
+        }
+
+        return response()->json(['message' => __('message.delete_success')]);
+    }
+
+    private function _forceDelete(Request $request, $id)
+    {
+        $model = $this->query->withTrashed()->findOrFail($id);
+        $model->forceDelete();
+    }
+
+    private function _softDelete(Request $request, $id)
+    {
+        // create Observer to handle cascade soft deletion
+        $model = $this->query->findOrFail($id);
+        $model->delete();
+    }
 }

@@ -23,8 +23,8 @@ class ChapterController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        return $this->service->update($request, $id);
+        return $this->service->update($request);
     }
 }

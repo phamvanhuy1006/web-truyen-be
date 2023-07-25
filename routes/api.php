@@ -40,6 +40,7 @@ Route::group(['prefix' => 'book'], function ($router) {
     Route::post('/createBook', [BookController::class, 'store']);
     Route::post('/updateBook', [BookController::class, 'update']);
     Route::post('/rating', [BookController::class, 'rating']);
+    Route::delete('/deleteBook/{id}', [BookController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'chapter'], function ($router) {
@@ -47,6 +48,7 @@ Route::group(['prefix' => 'chapter'], function ($router) {
     Route::get('/getChapter', [ChapterController::class, 'show']);
     Route::post('/createChapter', [ChapterController::class, 'store']);
     Route::post('/updateChapter', [ChapterController::class, 'update']);
+    Route::delete('/deleteChapter/{id}', [ChapterController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'genre'], function ($router) {
