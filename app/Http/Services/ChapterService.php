@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Chapter;
 use App\Transformers\ChapterTransformer;
+use Exception;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Illuminate\Http\Request;
 
@@ -44,15 +45,23 @@ class ChapterService extends BaseService
 
     public function store(Request $request)
     {
-        $rawData = json_decode($request->getContent());
-        $lastChapter = Chapter::where('bookSlug', $rawData->bookSlug)->count();
-        $chapter = Chapter::create([
-            'name' => $rawData->name ?? '',
-            'slug' => $rawData->slug ?? '',
-            'chapterOrder' => $lastChapter + 1,
-            'content' => $rawData->content ?? '',
-            'bookSlug' => $rawData->bookSlug ?? ''
-        ]);
+        try {
+            $rawData = json_decode($request->getContent());
+            $lastChapter = Chapter::where('bookSlug', $rawData->bookSlug)->count();
+            $chapter = Chapter::create([
+                'name' => $rawData->name ?? '',
+                'slug' => $rawData->slug ?? '',
+                'chapterOrder' => $lastChapter + 1,
+                'content' => $rawData->content ?? '',
+                'bookSlug' => $rawData->bookSlug ?? ''
+            ]);
+        } catch (Exception $e) {
+            // Handle the exception here (e.g., log the error, display an error message, etc.).
+            return response()->json(
+                $e,
+                500
+            );
+        }
 
         return response()->json([
             'status' => 200,
@@ -62,16 +71,25 @@ class ChapterService extends BaseService
 
     public function update(Request $request)
     {
-        $rawData = json_decode($request->getContent(), true); // Convert JSON object to array
-        $chapter = Chapter::findOrFail($rawData['id']);
+        try {
+            $rawData = json_decode($request->getContent(), true); // Convert JSON object to array
+            $chapter = Chapter::findOrFail($rawData['id']);
 
-        $fillableData = array_intersect_key($rawData, array_flip($chapter->getFillable()));
-        $chapter->update($fillableData);
+            $fillableData = array_intersect_key($rawData, array_flip($chapter->getFillable()));
 
-        return response()->json([
-            'status' => 200,
-            'data' => $chapter
-        ]);
+            $chapter->update($fillableData);
+
+            return response()->json([
+                'status' => 200,
+                'data' => $chapter
+            ]);
+        } catch (Exception $e) {
+            // Handle the exception here (e.g., log the error, display an error message, etc.).
+            return response()->json(
+                $e,
+                500
+            );
+        }
     }
 
     public function show(Request $request)
@@ -94,7 +112,7 @@ class ChapterService extends BaseService
             "bookSlug" => $request->bookSlug,
             "chapterOrder" => $chapter->chapterOrder + 1
         ])->first();
-        
+
         $previousChapter = Chapter::where([
             "bookSlug" => $request->bookSlug,
             "chapterOrder" => $chapter->chapterOrder - 1

@@ -7,6 +7,7 @@ use App\Models\Chapter;
 use App\Models\Genre;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Transformers\BookTransformer;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -49,38 +50,56 @@ class BookService extends BaseService
 
 	public function store(Request $request)
 	{
-		$rawData = json_decode($request->getContent());
+		try {
+			$rawData = json_decode($request->getContent());
 
-		$book = Book::create([
-			'name' => $rawData->name ?? '',
-			'author' => $rawData->author ?? '',
-			'genresList' => $rawData->genresList ?? '',
-			'collectionList' => $rawData->collectionList ?? '',
-			'categoryId' => $rawData->categoryId ?? 1,
-			'description' => $rawData->description ?? '',
-			'slug' => $rawData->slug ?? '',
-			'bookCover' => $rawData->bookCover ?? '',
-			'status' => $rawData->status ?? '',
-			'rating' => 'quantity: 0, ratingPoint: 0'
-		]);
+			$book = Book::create([
+				'name' => $rawData->name ?? '',
+				'author' => $rawData->author ?? '',
+				'genresList' => $rawData->genresList ?? '',
+				'collectionList' => $rawData->collectionList ?? '',
+				'categoryId' => $rawData->categoryId ?? 1,
+				'description' => $rawData->description ?? '',
+				'slug' => $rawData->slug ?? '',
+				'bookCover' => $rawData->bookCover ?? '',
+				'status' => $rawData->status ?? '',
+				'rating' => 'quantity: 0, ratingPoint: 0'
+			]);
 
-		return response()->json(
-			$book,
-			200
-		);
+			return response()->json(
+				$book,
+				200
+			);
+		} catch (Exception $e) {
+			// Handle the exception here (e.g., log the error, display an error message, etc.).
+			return response()->json(
+				$e,
+				500
+			);
+		}
 	}
 
 	public function update(Request $request)
 	{
-		$rawData = json_decode($request->getContent(), true); // Convert JSON object to array
-		$book = Book::findOrFail($rawData['id']); // Access the 'id' field as an array element
-		$fillableData = array_intersect_key($rawData, array_flip($book->getFillable()));
-		$book->update($fillableData);
 
-		return response()->json([
-			'status' => 200,
-			'data' => $book
-		]);
+		try {
+			$rawData = json_decode($request->getContent(), true); // Convert JSON object to array
+			$book = Book::findOrFail($rawData['id']); // Access the 'id' field as an array element
+			$fillableData = array_intersect_key($rawData, array_flip($book->getFillable()));
+
+			$book->update($fillableData);
+
+			return response()->json([
+				'status' => 200,
+				'data' => $book
+			]);
+		} catch (Exception $e) {
+			// Handle the exception here (e.g., log the error, display an error message, etc.).
+			return response()->json(
+				$e,
+				500
+			);
+		}
 	}
 
 	public function show(Request $request)
