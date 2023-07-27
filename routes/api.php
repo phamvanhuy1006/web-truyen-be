@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -34,21 +35,41 @@ Route::group([
     Route::post('/change-pass', [AuthController::class, 'changePassWord']);
 });
 
+Route::group(([
+    'middleware' => 'auth:sanctum'
+]), function ($router) {
+    Route::group(['prefix' => 'book'], function ($router) {
+        Route::post('/createBook', [BookController::class, 'store']);
+        Route::post('/updateBook', [BookController::class, 'update']);
+        Route::delete('/deleteBook/{id}', [BookController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'chapter'], function ($router) {
+        Route::post('/createChapter', [ChapterController::class, 'store']);
+        Route::post('/updateChapter', [ChapterController::class, 'update']);
+        Route::delete('/deleteChapter/{id}', [ChapterController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'file'], function ($router) {
+        Route::post('/uploadFile', [FileController::class, 'postUpload']);
+    });
+});
+
 Route::group(['prefix' => 'book'], function ($router) {
     Route::get('/getBookList', [BookController::class, 'index']);
-    Route::get('/getBook', [BookController::class, 'show']);   
-    Route::post('/createBook', [BookController::class, 'store']);
-    Route::post('/updateBook', [BookController::class, 'update']);
+    Route::get('/getBook', [BookController::class, 'show']);
+    // Route::post('/createBook', [BookController::class, 'store']);
+    // Route::post('/updateBook', [BookController::class, 'update']);
     Route::post('/rating', [BookController::class, 'rating']);
-    Route::delete('/deleteBook/{id}', [BookController::class, 'destroy']);
+    // Route::delete('/deleteBook/{id}', [BookController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'chapter'], function ($router) {
     Route::get('/getAllChapters', [ChapterController::class, 'index']);
     Route::get('/getChapter', [ChapterController::class, 'show']);
-    Route::post('/createChapter', [ChapterController::class, 'store']);
-    Route::post('/updateChapter', [ChapterController::class, 'update']);
-    Route::delete('/deleteChapter/{id}', [ChapterController::class, 'destroy']);
+    // Route::post('/createChapter', [ChapterController::class, 'store']);
+    // Route::post('/updateChapter', [ChapterController::class, 'update']);
+    // Route::delete('/deleteChapter/{id}', [ChapterController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'genre'], function ($router) {
@@ -64,6 +85,4 @@ Route::group(['prefix' => 'comment'], function ($router) {
     Route::post('/createComment', [CommentController::class, 'store']);
 });
 
-Route::group(['prefix' => 'file'], function ($router) {
-    Route::post('/uploadFile', [FileController::class, 'postUpload']);
-});
+

@@ -3,149 +3,106 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Services\AuthService;
+use Illuminate\Support\Facades\App;
 
 class AuthController extends Controller
 {
+    protected $authService;
     /**
-     * Create a new AuthController instance.
+     * Instantiate a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-        ]);
+        try {
+            $request->validate([
+                'email' => 'email|required',
+                'password' => 'required'
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            $credentials = request(['email', 'password']);
+
+            if (!Auth::attempt($credentials)) {
+                return response()->json([
+                    'status_code' => 500,
+                    'message' => 'Unauthorized'
+                ]);
+            }
+
+            $user = User::where('email', $request->email)->first();
+
+            if (!Hash::check($request->password, $user->password, [])) {
+                throw new \Exception('Error in Login');
+            }
+
+            $tokenResult = $user->createToken('authToken')->plainTextToken;
+
+            return response()->json([
+                'status_code' => 200,
+                'access_token' => $tokenResult,
+                'token_type' => 'Bearer',
+            ]);
+        } catch (\Exception $error) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Error in Login',
+                'error' => $error,
+            ]);
         }
-
-        if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->createNewToken($token);
     }
 
-    /**
-     * Register a User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function register(Request $request)
+    public function attempt($credentials)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'min:6',
-            'passwordConfirmation' => 'required_with:password|same:password|min:6'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+        $email = $credentials['email'];
+        $password = $credentials['password'];
+        $user = User::where('email', $email)
+            ->whereHas('roles', function ($q) {
+                $q->whereIn('name', ['super_admin', 'admin']);
+            })
+            ->first();
+        if (!$user || !Hash::check($password, $user->getAuthPassword())) {
+            return;
         }
 
-        $user = User::create(array_merge(
-            $validator->validated(),
-            [
-                'username' => uniqid(),
-                'password' => bcrypt($request->password)
-            ]
-        ));
-
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+        return $user;
     }
 
+    public function me(Request $request)
+    {
+        $user = Auth::user();
+        $user = User::query()
+            ->where(['id' => $user->id])
+            ->first();
+        if ($user->company) {
+            $user->setting = $user->company->setting;
+        }
+        $user->role = $user->getRoleNames()[0];
+        $user->all_permissions = $user->getPermissionNamesByRole();
+        if ($user) {
+            return response()->json($user);
+        }
+    }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    public function refreshToken(Request $request)
+    {
+        $refreshToken = $request->get('refresh_token');
+        $auth = $this->authService->refreshToken($refreshToken);
+        return response()->json($auth->data, $auth->code ?? 200);
+    }
+
     public function logout()
     {
-        auth()->logout();
-
-        return response()->json(['message' => 'User successfully signed out']);
-    }
-
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
-    {
-        return $this->createNewToken(auth('api')->refresh());
-    }
-
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function userProfile()
-    {
-        return response()->json(auth()->user());
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'user' => auth()->user()
-        ]);
-    }
-
-    public function changePassWord(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'old_password' => 'required|string|min:6',
-            'new_password' => 'required|string|confirmed|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+        if (Auth::check()) {
+            Auth::user()->token()->revoke();
+            return response()->json(['message' => 'Successful logout']);
         }
-        $userId = auth()->user()->id;
-
-        $user = User::where('id', $userId)->update(
-            ['password' => bcrypt($request->new_password)]
-        );
-
-        return response()->json([
-            'message' => 'User successfully changed password',
-            'user' => $user,
-        ], 201);
+        return response()->json(['message' => 'Fail logout'], 401);
     }
 }
