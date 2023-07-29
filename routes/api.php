@@ -29,9 +29,7 @@ Route::group([
 ], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::post('/change-pass', [AuthController::class, 'changePassWord']);
 });
 
@@ -40,6 +38,7 @@ Route::group(([
 ]), function ($router) {
 
     Route::get('/getCurrentUser', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::group(['prefix' => 'book'], function ($router) {
         Route::post('/createBook', [BookController::class, 'store']);
