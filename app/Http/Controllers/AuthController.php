@@ -31,9 +31,8 @@ class AuthController extends Controller
 
             if (!Auth::attempt($credentials)) {
                 return response()->json([
-                    'status_code' => 500,
                     'message' => 'Unauthorized'
-                ]);
+                ], 500);
             }
 
             $user = User::where('email', $request->email)->first();
@@ -51,10 +50,9 @@ class AuthController extends Controller
             ]);
         } catch (\Exception $error) {
             return response()->json([
-                'status_code' => 500,
                 'message' => 'Error in Login',
                 'error' => $error,
-            ]);
+            ], 500);
         }
     }
 
@@ -77,14 +75,7 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $user = Auth::user();
-        $user = User::query()
-            ->where(['id' => $user->id])
-            ->first();
-        if ($user->company) {
-            $user->setting = $user->company->setting;
-        }
-        $user->role = $user->getRoleNames()[0];
-        $user->all_permissions = $user->getPermissionNamesByRole();
+    
         if ($user) {
             return response()->json($user);
         }

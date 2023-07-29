@@ -38,6 +38,9 @@ Route::group([
 Route::group(([
     'middleware' => 'auth:sanctum'
 ]), function ($router) {
+
+    Route::get('/getCurrentUser', [AuthController::class, 'me']);
+
     Route::group(['prefix' => 'book'], function ($router) {
         Route::post('/createBook', [BookController::class, 'store']);
         Route::post('/updateBook', [BookController::class, 'update']);
