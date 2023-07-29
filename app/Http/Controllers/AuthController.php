@@ -91,7 +91,7 @@ class AuthController extends Controller
     public function logout()
     {
         if (Auth::check()) {
-            Auth::user()->token()->revoke();
+            Auth::user()->currentAccessToken()->delete();
             return response()->json(['message' => 'Successful logout']);
         }
         return response()->json(['message' => 'Fail logout'], 401);
