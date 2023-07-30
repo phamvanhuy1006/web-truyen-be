@@ -31,31 +31,33 @@ Route::group([
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/change-pass', [AuthController::class, 'changePassWord']);
+    
+    Route::group(([
+        'middleware' => 'auth:sanctum'
+    ]), function ($router) {
+    
+        Route::get('/getCurrentUser', [AuthController::class, 'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+    
+        Route::group(['prefix' => 'book'], function ($router) {
+            Route::post('/createBook', [BookController::class, 'store']);
+            Route::post('/updateBook', [BookController::class, 'update']);
+            Route::delete('/deleteBook/{id}', [BookController::class, 'destroy']);
+        });
+    
+        Route::group(['prefix' => 'chapter'], function ($router) {
+            Route::post('/createChapter', [ChapterController::class, 'store']);
+            Route::post('/updateChapter', [ChapterController::class, 'update']);
+            Route::delete('/deleteChapter/{id}', [ChapterController::class, 'destroy']);
+        });
+    
+        Route::group(['prefix' => 'file'], function ($router) {
+            Route::post('/uploadFile', [FileController::class, 'postUpload']);
+        });
+    });
 });
 
-Route::group(([
-    'middleware' => 'auth:sanctum'
-]), function ($router) {
 
-    Route::get('/getCurrentUser', [AuthController::class, 'me']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::group(['prefix' => 'book'], function ($router) {
-        Route::post('/createBook', [BookController::class, 'store']);
-        Route::post('/updateBook', [BookController::class, 'update']);
-        Route::delete('/deleteBook/{id}', [BookController::class, 'destroy']);
-    });
-
-    Route::group(['prefix' => 'chapter'], function ($router) {
-        Route::post('/createChapter', [ChapterController::class, 'store']);
-        Route::post('/updateChapter', [ChapterController::class, 'update']);
-        Route::delete('/deleteChapter/{id}', [ChapterController::class, 'destroy']);
-    });
-
-    Route::group(['prefix' => 'file'], function ($router) {
-        Route::post('/uploadFile', [FileController::class, 'postUpload']);
-    });
-});
 
 Route::group(['prefix' => 'book'], function ($router) {
     Route::get('/getBookList', [BookController::class, 'index']);
